@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>영어 → 한글 번역</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: "Pretendard", "Noto Sans KR", -apple-system, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #e8e8e8;
+        }
+        .container {
+            background: rgba(24, 4, 4, 0.05);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+        }
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #00d9ff, #00ff88);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .sub {
+            text-align: center;
+            color: #a0a0a0;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+        .file-wrap {
+            border: 2px dashed rgba(0, 217, 255, 0.35);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .file-wrap:hover, .file-wrap.dragover {
+            border-color: rgba(0, 217, 255, 0.7);
+            background: rgba(0, 217, 255, 0.06);
+        }
+        .file-wrap input[type="file"] {
+            display: none;
+        }
+        .file-label {
+            cursor: pointer;
+            display: block;
+            color: #b8b8b8;
+            font-size: 0.95rem;
+        }
+        .file-label strong {
+            color: #00d9ff;
+        }
+        .file-name {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #00ff88;
+            word-break: break-all;
+        }
+        button {
+            background: linear-gradient(135deg, #00d9ff 0%, #00b4d8 100%);
+            color: #0a0a12;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0, 217, 255, 0.35);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .hint {
+            font-size: 0.8rem;
+            color: #707070;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>영어 → 한글 번역</h1>
+        <p class="sub">영어 텍스트 파일을 업로드하면 한글로 번역된 파일을 받을 수 있습니다.</p>
+
+        <form action="/translate" method="post" enctype="multipart/form-data" id="form">
+            <div class="file-wrap" id="dropZone">
+                <label class="file-label" for="fileInput">
+                    <strong>파일 선택</strong> 또는 여기로 끌어다 놓기
+                </label>
+                <input type="file" name="file" id="fileInput" accept=".txt,.text" required>
+                <div class="file-name" id="fileName"></div>
+            </div>
+            <button type="submit">번역 후 다운로드</button>
+        </form>
+        <p class="hint">• txt 파일 (최대 16MB)<br>• UTF-8 또는 CP949 인코딩</p>
+    </div>
+
+    <script>
+        var dropZone = document.getElementById("dropZone");
+        var fileInput = document.getElementById("fileInput");
+        var fileName = document.getElementById("fileName");
+
+        fileInput.onchange = function () {
+            fileName.textContent = this.files.length ? this.files[0].name : "";
+        };
+
+        dropZone.ondragover = function (e) {
+            e.preventDefault();
+            dropZone.classList.add("dragover");
+        };
+        dropZone.ondragleave = function () {
+            dropZone.classList.remove("dragover");
+        };
+        dropZone.ondrop = function (e) {
+            e.preventDefault();
+            dropZone.classList.remove("dragover");
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                fileName.textContent = e.dataTransfer.files[0].name;
+            }
+        };
+    </script>
+</body>
+</html>
