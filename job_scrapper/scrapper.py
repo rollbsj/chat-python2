@@ -53,3 +53,4 @@ with open("jobs.csv","w",newline="",encoding="cp949") as file:
 
     for job in job_list:
         writer.writerow([job["회사이름"],job["공고제목"],job["회사장소"],job["자세히보기"]])
+        
